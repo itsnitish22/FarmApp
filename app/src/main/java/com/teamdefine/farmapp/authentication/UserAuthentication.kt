@@ -26,7 +26,6 @@ import com.teamdefine.farmapp.databinding.FragmentUserAuthenticationBinding
 class UserAuthentication : Fragment() {
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
-    val Req_Code: Int = 123
     private lateinit var binding: FragmentUserAuthenticationBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -50,7 +49,6 @@ class UserAuthentication : Fragment() {
 
         binding.button.setOnClickListener { view: View? ->
             Toast.makeText(requireContext(), "Logging In", Toast.LENGTH_SHORT).show()
-//            signInGoogle(
             signInWithGoogle()
         }
 
@@ -129,11 +127,5 @@ class UserAuthentication : Fragment() {
         }
     }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UserAuthenticationViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 }
