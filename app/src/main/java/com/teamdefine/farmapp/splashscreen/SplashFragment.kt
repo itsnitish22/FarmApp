@@ -1,17 +1,14 @@
-package com.teamdefine.farmapp.SplashScreen
+package com.teamdefine.farmapp.splashscreen
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.teamdefine.farmapp.databinding.FragmentSplashBinding
 
-class SplashScreenFragment : Fragment() {
+class SplashFragment : Fragment() {
     private lateinit var binding: FragmentSplashBinding
     private lateinit var firebaseAuth: FirebaseAuth //firebase auth
     override fun onCreateView(
