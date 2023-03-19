@@ -1,4 +1,4 @@
-package com.teamdefine.farmapp
+package com.teamdefine.farmapp.SplashScreen
 
 import androidx.lifecycle.ViewModel
 
