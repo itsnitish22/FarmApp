@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +16,7 @@ class FarmerBiddingFragment : Fragment() {
     private val viewModel: FarmerBiddingViewModel by viewModels()
     private lateinit var binding: FragmentFarmerBiddingBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private val args: FarmerBiddingFragmentArgs by navArgs()
     private var adapter: RecyclerView.Adapter<FarmerBiddingAdapter.ViewHolder>? = null //adapter
 
     override fun onCreateView(
