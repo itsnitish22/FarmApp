@@ -7,13 +7,13 @@ import io.socket.client.IO
 import io.socket.client.Socket
 
 class FirstYield : Application() {
-    var socketIO: Socket? = IO.socket("http://10.10.4.41/")
+    var socketIO: Socket? = IO.socket("http://192.168.2.18:3000/")
 
     override fun onCreate() {
         super.onCreate()
         try {
-            Log.i("Application Socket Success", "Socket Connected")
             socketIO?.connect()
+            Log.i("Application Socket Try", "Socket Try Connection")
         } catch (e: Exception) {
             Log.e("Application Socket Error", e.toString())
         }
