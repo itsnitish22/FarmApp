@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
@@ -33,8 +32,8 @@
                     android:ellipsize="end"
                     android:gravity="center|start"
                     android:maxLines="1"
-                    android:textSize="22sp"
-                    android:text="Current Bid Price" />
+                    android:text="Current Bid Price"
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/bidAmount"
@@ -44,9 +43,9 @@
                     android:ellipsize="end"
                     android:gravity="center|start"
                     android:maxLines="1"
+                    android:text="12,0000/क्विंटल"
                     android:textColor="#24AF29"
-                    android:textSize="20sp"
-                    android:text="12,0000/क्विंटल" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nameOfBuyer"
@@ -57,8 +56,8 @@
                     android:ellipsize="end"
                     android:gravity="center|start"
                     android:maxLines="1"
-                    android:textSize="15sp"
-                    android:text="From: Amrinder Singh Dhindsa" />
+                    android:text="From: Amrinder Singh Dhindsa"
+                    android:textSize="15sp" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

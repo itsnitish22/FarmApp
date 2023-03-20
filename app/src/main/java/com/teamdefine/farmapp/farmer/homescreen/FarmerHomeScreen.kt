@@ -17,7 +17,7 @@ class FarmerHomeScreen : Fragment() {
     private lateinit var viewModel: FarmerHomeScreenViewModel
     private lateinit var binding: FragmentFarmerHomeScreenBinding
     private lateinit var auth: FirebaseAuth
-    private var cropsData:ArrayList<Any> = arrayListOf()
+    private var cropsData: ArrayList<Any> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +34,7 @@ class FarmerHomeScreen : Fragment() {
 
         viewModel = ViewModelProvider(this).get(FarmerHomeScreenViewModel::class.java)
         val db = FirebaseFirestore.getInstance()
-        db.collection("Crops").whereEqualTo("farmerId",currentUserId).get()
+        db.collection("Crops").whereEqualTo("farmerId", currentUserId).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     cropsData.add(document.data)
