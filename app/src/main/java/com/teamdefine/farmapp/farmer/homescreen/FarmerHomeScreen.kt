@@ -17,6 +17,7 @@ class FarmerHomeScreen : Fragment() {
     private lateinit var viewModel: FarmerHomeScreenViewModel
     private lateinit var binding: FragmentFarmerHomeScreenBinding
     private lateinit var auth: FirebaseAuth
+    private var cropsData: ArrayList<Any> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,12 +33,17 @@ class FarmerHomeScreen : Fragment() {
         val currentUserId = auth.currentUser?.uid
 
         viewModel = ViewModelProvider(this).get(FarmerHomeScreenViewModel::class.java)
-        val crops = FirebaseFirestore.getInstance().collection("crops")
-        crops.whereEqualTo("farmerId", currentUserId).get().addOnSuccessListener { res ->
-            for (i in res) {
-                Log.i("helloabc", i.data.toString())
+        val db = FirebaseFirestore.getInstance()
+        db.collection("Crops").whereEqualTo("farmerId", currentUserId).get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    cropsData.add(document.data)
+                    Log.i("helloabc", "${document.data}")
+                }
             }
-        }
+            .addOnFailureListener { exception ->
+                Log.i("helloabc", "Error getting documents: ", exception)
+            }
         binding.addItem.setOnClickListener {
             findNavController().navigate(FarmerHomeScreenDirections.actionFarmerHomeScreenToFarmerNewItem())
         }

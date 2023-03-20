@@ -89,7 +89,7 @@
             android:id="@+id/action_farmerNewItem_to_farmerHomeScreen"
             app:destination="@id/farmerHomeScreen" />
     </fragment>
-        tools:layout="@layout/fragment_splash" />
+    tools:layout="@layout/fragment_splash" />
     <fragment
         android:id="@+id/farmerBiddingFragment"
         android:name="com.teamdefine.farmapp.farmer.bidding.FarmerBiddingFragment"
