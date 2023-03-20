@@ -2,6 +2,7 @@ package com.teamdefine.farmapp.farmer.registration
 
 import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
@@ -22,24 +23,45 @@ class FarmerRegister : Fragment() {
     private lateinit var viewModel: FarmerRegisterViewModel
     private lateinit var binding: FragmentFarmerRegisterBinding
     private lateinit var auth: FirebaseAuth
-
+    private var docUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentFarmerRegisterBinding.inflate(inflater, container, false)
+    ): View? = FragmentFarmerRegisterBinding.inflate(inflater, container, false).also {
+        binding = it
         auth = FirebaseAuth.getInstance()
-        uploadDoc()
-//        saveUserToDb()
-        return binding.root
+    }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupViews()
+        setupClickListeners()
     }
 
-    private fun uploadDoc() {
-        binding.button2.setOnClickListener {
-            val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
+    private fun setupClickListeners() {
+        binding.apply {
+            soilReport.setOnClickListener {
+                uploadDoc()
+            }
+            submitButton.setOnClickListener {
+                saveUserToDb(docUri.toString())
+            }
         }
+    }
+
+    private fun setupViews() {
+        auth.currentUser?.let {
+            binding.inputName.setText(it.displayName)
+            binding.inputEmail.setText(it.email)
+        }
+    }
+
+
+    private fun uploadDoc() {
+        val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
+
     }
 
     private fun saveUserToDb(docUri: String) {
@@ -52,8 +74,8 @@ class FarmerRegister : Fragment() {
         currentUser?.let {
             farmer["name"] = currentUser.displayName.toString()
             farmer["email"] = currentUser.email.toString()
-            farmer["landSize"] = landSize
-            farmer["soilReport"] = soilReport
+            farmer["mobileNumber"] = binding.inputPhone.text.toString()
+            farmer["soilReport"] = docUri
 
             database.collection("Farmers").document(currentUser.uid)
                 .set(farmer) //setting the data to be saved
@@ -81,6 +103,7 @@ class FarmerRegister : Fragment() {
         val nameIndex: Int = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
         returnCursor.moveToFirst()
         val fileName = returnCursor.getString(nameIndex)
+        binding.inputSoilReport.setText(fileName)
         Log.i("hello", "file name : $fileName")
         val storageRef = storage.reference.child("farmer/$fileName")
         storageRef.putFile(fileUri)
@@ -88,7 +111,8 @@ class FarmerRegister : Fragment() {
                 // File uploaded successfully
                 Log.i("SaveFile", "Saved User")
                 storageRef.downloadUrl.addOnSuccessListener {
-                    saveUserToDb(it.toString())
+                    docUri = it
+//                    saveUserToDb(it.toString())
                     Log.i("SaveFile", it.toString())
                 }
 
