@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Farm Ease</string>
+    <string name="terms_and_conditions">By authenticating i agree to the \n <b>Terms &amp; Conditions </b> </string>
 </resources>
