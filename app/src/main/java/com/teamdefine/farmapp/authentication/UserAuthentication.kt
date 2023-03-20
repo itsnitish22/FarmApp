@@ -8,6 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -45,13 +62,74 @@ class UserAuthentication : Fragment() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         firebaseAuth = FirebaseAuth.getInstance()
+        setupComposeView()
 
-        binding.button.setOnClickListener { view: View? ->
-            Toast.makeText(requireContext(), "Logging In", Toast.LENGTH_SHORT).show()
-            signInWithGoogle()
-        }
+//        binding.button.setOnClickListener { view: View? ->
+//            Toast.makeText(requireContext(), "Logging In", Toast.LENGTH_SHORT).show()
+//            signInWithGoogle()
+//        }
 
         return binding.root
+    }
+
+    private fun setupComposeView() {
+//        binding.composeView.setOnClickListener { view: View? ->
+//            Toast.makeText(requireContext(), "Logging In", Toast.LENGTH_SHORT).show()
+//            signInWithGoogle()
+//        }
+        binding.composeView.setContent {
+            GoogleAuthenticationButton()
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Preview
+    @Composable
+    fun GoogleAuthenticationButton() {
+        var clicked by remember {
+            mutableStateOf(false)
+        }
+
+        Surface(
+            onClick = {
+                clicked = !clicked
+                Toast.makeText(requireContext(), "Logging In", Toast.LENGTH_SHORT).show()
+                signInWithGoogle()
+            },
+            shape = RoundedCornerShape(4.dp),
+            border = BorderStroke(width = 1.dp, color = Color.LightGray),
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.animateContentSize(
+                animationSpec = tween(
+                    300,
+                    easing = LinearOutSlowInEasing
+                )
+            )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(
+                    start = 12.dp,
+                    end = 16.dp,
+                    top = 16.dp,
+                    bottom = 16.dp
+                )
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_google),
+                    contentDescription = "",
+                    tint = Color.Unspecified
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = "Authenticate to continue",
+                    color = Color(0xFF808080),
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.noto_devnagri))
+                )
+            }
+        }
     }
 
     private fun signInWithGoogle() {
