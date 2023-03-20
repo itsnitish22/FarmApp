@@ -58,7 +58,13 @@ class FarmerHomeScreen : Fragment() {
     }
 
     private fun setDataInRecView() {
-        adapter2 = FarmerHomeScreenAdapter(cropsData)
+        adapter2 =
+            FarmerHomeScreenAdapter(cropsData, object : FarmerHomeScreenAdapter.ClickListeners {
+                override fun onMainItemClick(data: Map<String, Any>) {
+                    Log.i("data data data", data.toString())
+                }
+
+            })
         binding.recyclerView.adapter = adapter2
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
     }

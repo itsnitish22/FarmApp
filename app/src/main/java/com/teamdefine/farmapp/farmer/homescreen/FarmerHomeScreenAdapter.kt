@@ -11,8 +11,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.teamdefine.farmapp.R
 
-class FarmerHomeScreenAdapter(private val data: ArrayList<Map<String, Any>>) :
-    RecyclerView.Adapter<FarmerHomeScreenAdapter.ViewHolder>() {
+class FarmerHomeScreenAdapter(
+    private val data: ArrayList<Map<String, Any>>,
+    private val clickListeners: ClickListeners
+) : RecyclerView.Adapter<FarmerHomeScreenAdapter.ViewHolder>() {
+
+    interface ClickListeners {
+        fun onMainItemClick(data: Map<String, Any>)
+    }
 
     private val myData: MutableList<Map<String, Any>> = ArrayList()
 
@@ -33,6 +39,10 @@ class FarmerHomeScreenAdapter(private val data: ArrayList<Map<String, Any>>) :
         Log.i("url", currentItem.get("image").toString())
         holder.cropNameTv.text = currentItem.get("itemName").toString()
         holder.currentPrice.text = currentItem.get("itemPrice").toString()
+
+        holder.itemView.setOnClickListener {
+            clickListeners.onMainItemClick(currentItem)
+        }
         val options: RequestOptions = RequestOptions()
             .centerCrop()
 
