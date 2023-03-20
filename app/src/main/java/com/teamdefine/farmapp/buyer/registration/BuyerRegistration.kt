@@ -22,6 +22,7 @@ class BuyerRegistration : Fragment() {
     private lateinit var binding: FragmentBuyerRegistrationBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var viewModel: BuyerRegistrationViewModel
+    private var photoUrl: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,14 +31,32 @@ class BuyerRegistration : Fragment() {
         binding = FragmentBuyerRegistrationBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
         uploadDoc()
+        setupDataInViews()
+        setupClickListeners()
         return binding.root
     }
 
-    private fun uploadDoc() {
-        binding.button3.setOnClickListener {
-            val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
+    private fun setupClickListeners() {
+        binding.idCard.setOnClickListener {
+            uploadDoc()
         }
+        binding.submitButton.setOnClickListener {
+            photoUrl?.let {
+                saveUserToDb(it)
+            }
+        }
+    }
+
+    private fun setupDataInViews() {
+        binding.apply {
+            inputName.setText(auth.currentUser?.displayName)
+            inputEmail.setText(auth.currentUser?.email)
+        }
+    }
+
+    private fun uploadDoc() {
+        val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
     }
 
     private fun saveUserToDb(docUri: String) {
@@ -49,7 +68,8 @@ class BuyerRegistration : Fragment() {
         currentUser?.let {
             buyer["name"] = currentUser.displayName.toString()
             buyer["email"] = currentUser.email.toString()
-            buyer["doc1"] = img1
+            buyer["phoneNumber"] = binding.inputPhone.text.toString()
+            buyer["doc1"] = photoUrl.toString()
 
             database.collection("Buyers").document(currentUser.uid)
                 .set(buyer) //setting the data to be saved
@@ -77,6 +97,7 @@ class BuyerRegistration : Fragment() {
         val nameIndex: Int = returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
         returnCursor.moveToFirst()
         val fileName = returnCursor.getString(nameIndex)
+        binding.inputSoilReport.setText(fileName)
         Log.i("hello", "file name : $fileName")
         val storageRef = storage.reference.child("buyer/$fileName")
         storageRef.putFile(fileUri)
@@ -84,7 +105,7 @@ class BuyerRegistration : Fragment() {
                 // File uploaded successfully
                 Log.i("SaveFile", "Saved User")
                 storageRef.downloadUrl.addOnSuccessListener {
-                    saveUserToDb(it.toString())
+                    photoUrl = it.toString()
                     Log.i("SaveFile", it.toString())
                 }
 
