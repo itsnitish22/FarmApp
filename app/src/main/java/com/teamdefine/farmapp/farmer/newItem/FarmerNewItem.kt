@@ -2,7 +2,6 @@ package com.teamdefine.farmapp.farmer.newItem
 
 import android.content.Intent
 import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
@@ -16,19 +15,16 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.teamdefine.farmapp.databinding.FragmentFarmerNewItemBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class FarmerNewItem : Fragment() {
 
     private lateinit var viewModel: FarmerNewItemViewModel
-    private lateinit var binding:FragmentFarmerNewItemBinding
+    private lateinit var binding: FragmentFarmerNewItemBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var imageUrl:String
+    private lateinit var imageUrl: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,23 +46,25 @@ class FarmerNewItem : Fragment() {
             saveItemToDb(imageUrl)
         }
     }
+
     fun generateUUID(): String {
         return UUID.randomUUID().toString()
     }
-    private fun saveItemToDb(fileUri:String) {
+
+    private fun saveItemToDb(fileUri: String) {
         val currentUser = auth.currentUser
-        val uid=generateUUID()
+        val uid = generateUUID()
         val database = FirebaseFirestore.getInstance()
 
         val crop: MutableMap<String, Any> = HashMap()
-        val uri=fileUri
+        val uri = fileUri
 
         currentUser?.let {
-            crop["farmerId"]=currentUser.uid
-            crop["itemId"]=uid
-            crop["itemName"]=binding.CropName.text.toString()
-            crop["itemPrice"]=binding.cropPrice.text.toString()
-            crop["image"]=uri
+            crop["farmerId"] = currentUser.uid
+            crop["itemId"] = uid
+            crop["itemName"] = binding.CropName.text.toString()
+            crop["itemPrice"] = binding.cropPrice.text.toString()
+            crop["image"] = uri
 
 
             database.collection("Crops").document(uid)
@@ -84,6 +82,7 @@ class FarmerNewItem : Fragment() {
                 }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
