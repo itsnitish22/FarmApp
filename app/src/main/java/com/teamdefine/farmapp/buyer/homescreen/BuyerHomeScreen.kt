@@ -8,16 +8,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamdefine.farmapp.databinding.FragmentBuyerHomeScreenBinding
+import com.teamdefine.farmapp.farmer.homescreen.FarmerHomeScreenDirections
 
 class BuyerHomeScreen : Fragment() {
-
     private lateinit var viewModel: BuyerHomeScreenViewModel
     private lateinit var binding: FragmentBuyerHomeScreenBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private var cropsData: ArrayList<Any> = arrayListOf()
+    private var cropsData: ArrayList<Map<String, Any>> = arrayListOf()
+    private lateinit var adapter2: BuyerHomeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +40,32 @@ class BuyerHomeScreen : Fragment() {
                     cropsData.add(document.data)
                     Log.i("helloabc", "${document.data}")
                 }
-                binding.next.setOnClickListener {
-                    findNavController().navigate(BuyerHomeScreenDirections.actionBuyerHomeScreenToBuyerBiddingFragment())
-                }
+                addDataToRecView(cropsData)
+
+
+//                binding.next.setOnClickListener {
+//                    findNavController().navigate(BuyerHomeScreenDirections.actionBuyerHomeScreenToBuyerBiddingFragment())
+//                }
             }
             .addOnFailureListener { exception ->
                 Log.i("helloabc", "Error getting documents: ", exception)
             }
+    }
+
+    private fun addDataToRecView(cropsData: ArrayList<Map<String, Any>>) {
+        adapter2 =
+            BuyerHomeAdapter(cropsData, object : BuyerHomeAdapter.ClickListeners {
+                override fun onItemClick(data: Map<String, Any>) {
+                    findNavController().navigate(
+                        FarmerHomeScreenDirections.actionFarmerHomeScreenToFarmerBiddingFragment(
+                            data.get("itemId") as String
+                        )
+                    )
+                }
+            })
+        binding.recyclerView.adapter = adapter2
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+
     }
 
 }
