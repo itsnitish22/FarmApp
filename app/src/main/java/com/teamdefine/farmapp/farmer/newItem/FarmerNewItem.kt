@@ -1,7 +1,8 @@
-package com.teamdefine.farmapp.farmer.registration
+package com.teamdefine.farmapp.farmer.newItem
 
 import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
@@ -10,56 +11,69 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
-import com.teamdefine.farmapp.databinding.FragmentFarmerRegisterBinding
+import com.teamdefine.farmapp.databinding.FragmentFarmerNewItemBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
-class FarmerRegister : Fragment() {
+class FarmerNewItem : Fragment() {
 
-    private lateinit var viewModel: FarmerRegisterViewModel
-    private lateinit var binding: FragmentFarmerRegisterBinding
+    private lateinit var viewModel: FarmerNewItemViewModel
+    private lateinit var binding:FragmentFarmerNewItemBinding
     private lateinit var auth: FirebaseAuth
-
+    private lateinit var imageUrl:String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentFarmerRegisterBinding.inflate(inflater, container, false)
+        binding = FragmentFarmerNewItemBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
-        uploadDoc()
-//        saveUserToDb()
         return binding.root
     }
 
-    private fun uploadDoc() {
-        binding.button2.setOnClickListener {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(FarmerNewItemViewModel::class.java)
+        binding.image1.setOnClickListener {
             val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
         }
+        binding.submit.setOnClickListener {
+            saveItemToDb(imageUrl)
+        }
     }
-
-    private fun saveUserToDb(docUri: String) {
+    fun generateUUID(): String {
+        return UUID.randomUUID().toString()
+    }
+    private fun saveItemToDb(fileUri:String) {
         val currentUser = auth.currentUser
-        val landSize = "landSize"
-        val soilReport = docUri
+        val uid=generateUUID()
         val database = FirebaseFirestore.getInstance()
 
-        val farmer: MutableMap<String, Any> = HashMap()
-        currentUser?.let {
-            farmer["name"] = currentUser.displayName.toString()
-            farmer["email"] = currentUser.email.toString()
-            farmer["landSize"] = landSize
-            farmer["soilReport"] = soilReport
+        val crop: MutableMap<String, Any> = HashMap()
+        val uri=fileUri
 
-            database.collection("Farmers").document(currentUser.uid)
-                .set(farmer) //setting the data to be saved
+        currentUser?.let {
+            crop["farmerId"]=currentUser.uid
+            crop["itemId"]=uid
+            crop["itemName"]=binding.CropName.text.toString()
+            crop["itemPrice"]=binding.cropPrice.text.toString()
+            crop["image"]=uri
+
+
+            database.collection("Crops").document(uid)
+                .set(crop)//setting the data to be saved
                 .addOnSuccessListener {
                     Log.i("helloabc", "success")
-                    findNavController().navigate(FarmerRegisterDirections.actionFarmerRegisterToFarmerHomeScreen())
+                    findNavController().navigate(FarmerNewItemDirections.actionFarmerNewItemToFarmerHomeScreen())
                     //if the data is saved successfully, move the uer to login fragment
 
                 }
@@ -70,7 +84,6 @@ class FarmerRegister : Fragment() {
                 }
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -82,13 +95,13 @@ class FarmerRegister : Fragment() {
         returnCursor.moveToFirst()
         val fileName = returnCursor.getString(nameIndex)
         Log.i("hello", "file name : $fileName")
-        val storageRef = storage.reference.child("farmer/$fileName")
+        val storageRef = storage.reference.child("farmer/crops/$fileName")
         storageRef.putFile(fileUri)
             .addOnSuccessListener { taskSnapshot ->
                 // File uploaded successfully
                 Log.i("SaveFile", "Saved User")
                 storageRef.downloadUrl.addOnSuccessListener {
-                    saveUserToDb(it.toString())
+                    saveItemToDb(it.toString())
                     Log.i("SaveFile", it.toString())
                 }
 

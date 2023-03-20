@@ -47,7 +47,7 @@ class SplashFragment : Fragment() {
 
 
                 }
-            }, 3000)
+            }, 500)
         } else {
             Handler().postDelayed({
                 view?.post {

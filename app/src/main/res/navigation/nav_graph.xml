@@ -36,7 +36,11 @@
         android:id="@+id/farmerHomeScreen"
         android:name="com.teamdefine.farmapp.farmer.homescreen.FarmerHomeScreen"
         android:label="fragment_farmer_home_screen"
-        tools:layout="@layout/fragment_farmer_home_screen" />
+        tools:layout="@layout/fragment_farmer_home_screen" >
+        <action
+            android:id="@+id/action_farmerHomeScreen_to_farmerNewItem"
+            app:destination="@id/farmerNewItem" />
+    </fragment>
     <fragment
         android:id="@+id/buyerHomeScreen"
         android:name="com.teamdefine.farmapp.buyer.homescreen.BuyerHomeScreen"
@@ -74,5 +78,14 @@
         <action
             android:id="@+id/action_buyerRegistration_to_buyerHomeScreen"
             app:destination="@id/buyerHomeScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/farmerNewItem"
+        android:name="com.teamdefine.farmapp.farmer.newItem.FarmerNewItem"
+        android:label="fragment_farmer_new_item"
+        tools:layout="@layout/fragment_farmer_new_item" >
+        <action
+            android:id="@+id/action_farmerNewItem_to_farmerHomeScreen"
+            app:destination="@id/farmerHomeScreen" />
     </fragment>
 </navigation>
