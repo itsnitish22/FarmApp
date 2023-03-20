@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamdefine.farmapp.R
+import org.json.JSONObject
 
 class FarmerBiddingAdapter() : RecyclerView.Adapter<FarmerBiddingAdapter.ViewHolder>() {
 

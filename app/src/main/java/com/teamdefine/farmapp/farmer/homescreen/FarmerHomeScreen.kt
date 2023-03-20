@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamdefine.farmapp.databinding.FragmentFarmerHomeScreenBinding
@@ -17,7 +19,10 @@ class FarmerHomeScreen : Fragment() {
     private lateinit var viewModel: FarmerHomeScreenViewModel
     private lateinit var binding: FragmentFarmerHomeScreenBinding
     private lateinit var auth: FirebaseAuth
-    private var cropsData: ArrayList<Any> = arrayListOf()
+    private var cropsData: ArrayList<Map<String, Any>> = arrayListOf()
+    private lateinit var db: FirebaseFirestore
+    private var adapter: RecyclerView.Adapter<FarmerHomeScreenAdapter.ViewHolder>? = null
+    private lateinit var adapter2: FarmerHomeScreenAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,29 +30,36 @@ class FarmerHomeScreen : Fragment() {
     ): View? {
         binding = FragmentFarmerHomeScreenBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+        viewModel = ViewModelProvider(this).get(FarmerHomeScreenViewModel::class.java)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val currentUserId = auth.currentUser?.uid
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getUserData()
+        binding.addItem.setOnClickListener {
+            findNavController().navigate(FarmerHomeScreenDirections.actionFarmerHomeScreenToFarmerNewItem())
+        }
+    }
 
-        viewModel = ViewModelProvider(this).get(FarmerHomeScreenViewModel::class.java)
-        val db = FirebaseFirestore.getInstance()
-        db.collection("Crops").whereEqualTo("farmerId", currentUserId).get()
+    private fun getUserData() {
+        db.collection("Crops").whereEqualTo("farmerId", auth.currentUser?.uid).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     cropsData.add(document.data)
                     Log.i("helloabc", "${document.data}")
                 }
+                setDataInRecView()
             }
             .addOnFailureListener { exception ->
                 Log.i("helloabc", "Error getting documents: ", exception)
             }
-        binding.addItem.setOnClickListener {
-            findNavController().navigate(FarmerHomeScreenDirections.actionFarmerHomeScreenToFarmerNewItem())
-        }
-        // TODO: Use the ViewModel
     }
 
+    private fun setDataInRecView() {
+        adapter2 = FarmerHomeScreenAdapter(cropsData)
+        binding.recyclerView.adapter = adapter2
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+    }
 }
