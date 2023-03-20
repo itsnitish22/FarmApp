@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "31549226943-fj6hskm74agnn3mr50bv83s46voi1m9f.apps.googleusercontent.com",
+          "client_id": "31549226943-amqp38r0rpq3sogcpko2jekdsjb92d6q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.teamdefine.farmapp",
-            "certificate_hash": "407298f9d1544f448d9184497564725a3e3af956"
+            "certificate_hash": "d2aa6b89309d5cab3de34813cd14a9c2b21b398d"
           }
         },
         {
