@@ -21,8 +21,8 @@ class BuyerBiddingFragment : Fragment() {
     private val args: BuyerBiddingFragmentArgs by navArgs()
     private lateinit var database: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
-    private lateinit var db:FirebaseFirestore
-    private lateinit var currentUser:FirebaseUser
+    private lateinit var db: FirebaseFirestore
+    private lateinit var currentUser: FirebaseUser
 
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class BuyerBiddingFragment : Fragment() {
             .whereEqualTo("item_id", args.itemId).get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
-                    Log.i("helloabc","empty")
+                    Log.i("helloabc", "empty")
                     firstTime = true
                 }
                 bidding(firstTime)
@@ -69,7 +69,7 @@ class BuyerBiddingFragment : Fragment() {
                 .addOnSuccessListener { crop ->
                     Log.i("crop price", crop.documents[0].data.toString())
                     price = crop.documents[0].data?.get("itemPrice").toString()
-                    Log.i("price",price.toString())
+                    Log.i("price", price.toString())
                     binding.farmerBid.text = price
                     binding.confirmButton.setOnClickListener {
                         val buyerBid = binding.buyerBid.text.toString()
@@ -78,19 +78,21 @@ class BuyerBiddingFragment : Fragment() {
                             bid["item_id"] = args.itemId
                             bid["farmer_bid"] = price
                             bid["buyer_bid"] = buyerBid
-                            db.collection("Bidding").document(generateUUID()).set(bid).addOnSuccessListener {
-                                Log.i("helloabc", "bid created")
-                                findNavController().navigate(BuyerBiddingFragmentDirections.actionBuyerBiddingFragmentToBuyerHomeScreen())
-                            }
+                            db.collection("Bidding").document(generateUUID()).set(bid)
+                                .addOnSuccessListener {
+                                    Log.i("helloabc", "bid created")
+                                    findNavController().navigate(BuyerBiddingFragmentDirections.actionBuyerBiddingFragmentToBuyerHomeScreen())
+                                }
                         }
                     }
                 }
 
         } else {
-            db.collection("Bidding").whereEqualTo("buyer_id", currentUser?.uid).whereEqualTo("item_id", args.itemId)
+            db.collection("Bidding").whereEqualTo("buyer_id", currentUser?.uid)
+                .whereEqualTo("item_id", args.itemId)
                 .get()
                 .addOnSuccessListener { crop ->
-                    Log.i("helloabcc3",crop.documents.size.toString())
+                    Log.i("helloabcc3", crop.documents.size.toString())
                     binding.farmerBid.text = crop.documents[0].data?.get("farmer_bid").toString()
                     binding.buyerBid.setText(crop.documents[0].data?.get("buyer_bid").toString())
                     binding.confirmButton.setOnClickListener {
@@ -105,4 +107,4 @@ class BuyerBiddingFragment : Fragment() {
         }
     }
 
-    }
+}
