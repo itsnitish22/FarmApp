@@ -9,14 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.teamdefine.farmapp.R
 import com.teamdefine.farmapp.databinding.FragmentBuyerHomeScreenBinding
-import com.teamdefine.farmapp.databinding.FragmentFarmerRegisterBinding
 
 class BuyerHomeScreen : Fragment() {
 
     private lateinit var viewModel: BuyerHomeScreenViewModel
-    private lateinit var binding:FragmentBuyerHomeScreenBinding
+    private lateinit var binding: FragmentBuyerHomeScreenBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private var cropsData: ArrayList<Any> = arrayListOf()
 

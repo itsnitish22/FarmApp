@@ -97,7 +97,7 @@
         android:id="@+id/farmerBiddingFragment"
         android:name="com.teamdefine.farmapp.farmer.bidding.FarmerBiddingFragment"
         android:label="fragment_farmer_bidding"
-        tools:layout="@layout/fragment_farmer_bidding" >
+        tools:layout="@layout/fragment_farmer_bidding">
         <argument
             android:name="item_id"
             app:argType="string" />

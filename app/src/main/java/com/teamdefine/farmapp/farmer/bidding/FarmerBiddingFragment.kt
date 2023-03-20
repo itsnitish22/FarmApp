@@ -16,7 +16,7 @@ class FarmerBiddingFragment : Fragment() {
     private val viewModel: FarmerBiddingViewModel by viewModels()
     private lateinit var binding: FragmentFarmerBiddingBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private val args:FarmerBiddingFragmentArgs by navArgs()
+    private val args: FarmerBiddingFragmentArgs by navArgs()
     private var adapter: RecyclerView.Adapter<FarmerBiddingAdapter.ViewHolder>? = null //adapter
 
     override fun onCreateView(
