@@ -61,7 +61,11 @@ class FarmerHomeScreen : Fragment() {
         adapter2 =
             FarmerHomeScreenAdapter(cropsData, object : FarmerHomeScreenAdapter.ClickListeners {
                 override fun onMainItemClick(data: Map<String, Any>) {
-                    Log.i("data data data", data.toString())
+                    findNavController().navigate(
+                        FarmerHomeScreenDirections.actionFarmerHomeScreenToFarmerBiddingFragment(
+                            data.get("itemId") as String
+                        )
+                    )
                 }
 
             })
