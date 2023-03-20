@@ -3,8 +3,11 @@ package com.teamdefine.farmapp.buyer.homescreen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.teamdefine.farmapp.R
 
 class BuyerHomeAdapter(
@@ -18,7 +21,7 @@ class BuyerHomeAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cropIv: TextView = itemView.findViewById(R.id.cropIv)
+        val cropIv: ImageView = itemView.findViewById(R.id.cropIv)
         val cropNameTv: TextView = itemView.findViewById(R.id.cropNameTv)
         val currentPrice: TextView = itemView.findViewById(R.id.currentPriceTv)
     }
@@ -34,7 +37,11 @@ class BuyerHomeAdapter(
 
         holder.cropNameTv.text = currentItem.get("itemName").toString()
         holder.currentPrice.text = currentItem.get("itemPrice").toString()
+        val options: RequestOptions = RequestOptions()
+            .centerCrop()
 
+        Glide.with(holder.itemView.context).load(currentItem.get("image").toString()).apply(options)
+            .into(holder.cropIv)
         holder.itemView.setOnClickListener {
             clickListeners.onItemClick(currentItem)
         }

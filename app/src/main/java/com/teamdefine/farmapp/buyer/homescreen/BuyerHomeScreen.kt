@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamdefine.farmapp.databinding.FragmentBuyerHomeScreenBinding
-import com.teamdefine.farmapp.farmer.homescreen.FarmerHomeScreenDirections
 
 class BuyerHomeScreen : Fragment() {
     private lateinit var viewModel: BuyerHomeScreenViewModel
@@ -57,7 +56,7 @@ class BuyerHomeScreen : Fragment() {
             BuyerHomeAdapter(cropsData, object : BuyerHomeAdapter.ClickListeners {
                 override fun onItemClick(data: Map<String, Any>) {
                     findNavController().navigate(
-                        FarmerHomeScreenDirections.actionFarmerHomeScreenToFarmerBiddingFragment(
+                        BuyerHomeScreenDirections.actionBuyerHomeScreenToBuyerBiddingFragment(
                             data.get("itemId") as String
                         )
                     )
