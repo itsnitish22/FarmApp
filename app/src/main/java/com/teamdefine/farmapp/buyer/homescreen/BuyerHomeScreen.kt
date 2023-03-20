@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamdefine.farmapp.databinding.FragmentBuyerHomeScreenBinding
@@ -36,6 +37,9 @@ class BuyerHomeScreen : Fragment() {
                 for (document in documents) {
                     cropsData.add(document.data)
                     Log.i("helloabc", "${document.data}")
+                }
+                binding.next.setOnClickListener {
+                    findNavController().navigate(BuyerHomeScreenDirections.actionBuyerHomeScreenToBuyerBiddingFragment())
                 }
             }
             .addOnFailureListener { exception ->

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/farmerBiddingFragment"
+    app:startDestination="@id/splashFragment"
     tools:ignore="ExtraText">
 
     <fragment
@@ -49,7 +49,11 @@
         android:id="@+id/buyerHomeScreen"
         android:name="com.teamdefine.farmapp.buyer.homescreen.BuyerHomeScreen"
         android:label="fragment_buyer_home_screen"
-        tools:layout="@layout/fragment_buyer_home_screen" />
+        tools:layout="@layout/fragment_buyer_home_screen" >
+        <action
+            android:id="@+id/action_buyerHomeScreen_to_buyerBiddingFragment"
+            app:destination="@id/buyerBiddingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userAuthentication"
         android:name="com.teamdefine.farmapp.authentication.UserAuthentication"
@@ -101,5 +105,18 @@
         <argument
             android:name="item_id"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/buyerBiddingFragment"
+        android:name="com.teamdefine.farmapp.buyer.bidding.BuyerBiddingFragment"
+        android:label="fragment_buyer_bidding"
+        tools:layout="@layout/fragment_buyer_bidding" >
+        <argument
+            android:name="item_id"
+            app:argType="string"
+            android:defaultValue="6fd7664d-39d2-42ee-b938-38d5b6c3d11c" />
+        <action
+            android:id="@+id/action_buyerBiddingFragment_to_buyerHomeScreen"
+            app:destination="@id/buyerHomeScreen" />
     </fragment>
 </navigation>
