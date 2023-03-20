@@ -30,7 +30,7 @@ class FarmerBiddingViewModel : ViewModel() {
 //                    putString("cropId", cropId);
 //                    putString("userName", "NitishSharma")
 //                })
-        )
+//        )
     }
 
     private val onNewBidOnCrop =
