@@ -70,9 +70,9 @@ class BuyerBiddingFragment : Fragment() {
                     Log.i("crop price", crop.documents[0].data.toString())
                     price = crop.documents[0].data?.get("itemPrice").toString()
                     Log.i("price", price.toString())
-                    binding.farmerBid.text = price
-                    binding.confirmButton.setOnClickListener {
-                        val buyerBid = binding.buyerBid.text.toString()
+                    binding.priceTv.text = price
+                    binding.submitButton.setOnClickListener {
+                        val buyerBid = binding.inputNewPrice.text.toString()
                         currentUser?.let {
                             bid["buyer_id"] = currentUser.uid
                             bid["item_id"] = args.itemId
@@ -93,10 +93,10 @@ class BuyerBiddingFragment : Fragment() {
                 .get()
                 .addOnSuccessListener { crop ->
                     Log.i("helloabcc3", crop.documents.size.toString())
-                    binding.farmerBid.text = crop.documents[0].data?.get("farmer_bid").toString()
-                    binding.buyerBid.setText(crop.documents[0].data?.get("buyer_bid").toString())
-                    binding.confirmButton.setOnClickListener {
-                        val buyerBid = binding.buyerBid.text.toString()
+                    binding.priceTv.text = crop.documents[0].data?.get("farmer_bid").toString()
+                    binding.inputNewPrice.setText(crop.documents[0].data?.get("buyer_bid").toString())
+                    binding.submitButton.setOnClickListener {
+                        val buyerBid = binding.inputNewPrice.text.toString()
                         db.collection("Bidding").document(crop.documents[0].id)
                             .update("buyer_bid", buyerBid).addOnSuccessListener {
                                 Log.i("helloabc", "bid updated")
