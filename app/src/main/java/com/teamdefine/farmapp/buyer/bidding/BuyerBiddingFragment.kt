@@ -81,12 +81,14 @@ class BuyerBiddingFragment : Fragment() {
                         .into(binding.mainIv)
                     binding.submitButton.setOnClickListener {
                         val buyerBid = binding.inputNewPrice.text.toString()
+                        val bidId = generateUUID()
                         currentUser?.let {
                             bid["buyer_id"] = currentUser.uid
                             bid["item_id"] = args.itemId
                             bid["farmer_bid"] = price
                             bid["buyer_bid"] = buyerBid
-                            db.collection("Bidding").document(generateUUID()).set(bid)
+                            bid["bid_id"] = bidId
+                            db.collection("Bidding").document(bidId).set(bid)
                                 .addOnSuccessListener {
                                     Log.i("helloabc", "bid created")
                                     findNavController().navigate(BuyerBiddingFragmentDirections.actionBuyerBiddingFragmentToBuyerHomeScreen())

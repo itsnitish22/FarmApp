@@ -23,7 +23,7 @@ class FarmerBiddingFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private val args: FarmerBiddingFragmentArgs by navArgs()
     private var adapter: RecyclerView.Adapter<FarmerBiddingAdapter.ViewHolder>? = null //adapter
-    private var bidList: ArrayList<String> = arrayListOf()
+    private var bidList: ArrayList<Map<String, Any>> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,28 +38,32 @@ class FarmerBiddingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val cropId = args.itemId
         db.collection("Crops").document(cropId).get().addOnSuccessListener { it ->
+            val cropId = it.get("itemId")
+            val farmerId = it.get("farmerId")
+
             val options: RequestOptions = RequestOptions()
                 .centerCrop()
             Glide.with(requireContext()).load(it.get("image").toString()).apply(options)
                 .into(binding.cropIv)
 
             binding.cropNameTv.text = it.get("itemName").toString()
-            binding.priceOfCrop.text = it.get("itemPrice").toString() + "/क्विंटल"
-
-            val farmerId = it.get("farmerId")
-            db.collection("Farmers").document(farmerId.toString()).get().addOnSuccessListener {
-                binding.farmerNameTv.text = it.get("name").toString()
-                db.collection("Bidding").whereEqualTo("item_id", it.get("itemId")).get()
-                    .addOnSuccessListener {
-                        for (i in it) {
-                            Log.i("test", i.data.toString())
-                            bidList.add(i.data.toString())
-                        }
+            binding.priceOfCrop.text = "₹" + it.get("itemPrice").toString() + "/क्विंटल"
+            db.collection("Bidding").whereEqualTo("item_id", cropId).get()
+                .addOnSuccessListener {
+                    for (i in it) {
+                        Log.i("test", i.data.toString())
+                        bidList.add(i.data)
                     }
-            }
+                    db.collection("Farmers").document(farmerId.toString()).get()
+                        .addOnSuccessListener {
+                            binding.farmerNameTv.text = it.get("name").toString()
+                            initViews()
+
+                        }
+                }
+
 
         }
-        initViews()
     }
 
     private fun initViews() {

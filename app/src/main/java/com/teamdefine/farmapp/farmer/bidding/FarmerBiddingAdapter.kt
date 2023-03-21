@@ -1,5 +1,6 @@
 package com.teamdefine.farmapp.farmer.bidding
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.teamdefine.farmapp.R
 
-class FarmerBiddingAdapter(private val bidList: ArrayList<String>) :
+class FarmerBiddingAdapter(private val bidList: ArrayList<Map<String, Any>>) :
     RecyclerView.Adapter<FarmerBiddingAdapter.ViewHolder>() {
     private lateinit var db: FirebaseFirestore
 
@@ -26,16 +27,19 @@ class FarmerBiddingAdapter(private val bidList: ArrayList<String>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = bidList[position]
-        db.collection("Bidding").document(currentItem).get().addOnSuccessListener {
-            holder.bidAmount.text = it.get("buyer_bid").toString()
-            db.collection("Buyers").document(it.get("buyer_id").toString()).get()
-                .addOnSuccessListener {
-                    holder.nameOfBuyer.text = it.get("name").toString()
-                }
-        }
+        Log.i("cur_item", currentItem.toString())
+        db.collection("Bidding").document(currentItem.get("bid_id").toString()).get()
+            .addOnSuccessListener {
+                Log.i("buyBid", it.get("buyer_bid").toString())
+                holder.bidAmount.text = "₹" + it.get("buyer_bid").toString() + "/क्विंटल"
+                db.collection("Buyers").document(it.get("buyer_id").toString()).get()
+                    .addOnSuccessListener {
+                        holder.nameOfBuyer.text = it.get("name").toString()
+                    }
+            }
     }
 
     override fun getItemCount(): Int {
-        return 2
+        return bidList.size
     }
 }
