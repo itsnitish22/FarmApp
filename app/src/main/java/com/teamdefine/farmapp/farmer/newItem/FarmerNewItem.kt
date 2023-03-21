@@ -38,10 +38,10 @@ class FarmerNewItem : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FarmerNewItemViewModel::class.java)
-        binding.image1.setOnClickListener {
-            val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
-        }
+//        binding.image1.setOnClickListener {
+//            val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
+//            startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
+//        }
         binding.submit.setOnClickListener {
             saveItemToDb(imageUrl)
         }
@@ -62,8 +62,8 @@ class FarmerNewItem : Fragment() {
         currentUser?.let {
             crop["farmerId"] = currentUser.uid
             crop["itemId"] = uid
-            crop["itemName"] = binding.CropName.text.toString()
-            crop["itemPrice"] = binding.cropPrice.text.toString()
+//            crop["itemName"] = binding.CropName.text.toString()
+//            crop["itemPrice"] = binding.cropPrice.text.toString()
             crop["image"] = uri
 
 

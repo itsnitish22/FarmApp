@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -70,7 +72,13 @@ class BuyerBiddingFragment : Fragment() {
                     Log.i("crop price", crop.documents[0].data.toString())
                     price = crop.documents[0].data?.get("itemPrice").toString()
                     Log.i("price", price.toString())
-                    binding.priceTv.text = price
+                    binding.priceTv.text = "₹" + price + "/क्विंटल"
+                    val options: RequestOptions = RequestOptions()
+                        .centerCrop()
+                    binding.titleItemTv.text = crop.documents[0].data?.get("itemName").toString()
+                    Glide.with(requireContext())
+                        .load(crop.documents[0].data?.get("image").toString()).apply(options)
+                        .into(binding.mainIv)
                     binding.submitButton.setOnClickListener {
                         val buyerBid = binding.inputNewPrice.text.toString()
                         currentUser?.let {
@@ -93,8 +101,25 @@ class BuyerBiddingFragment : Fragment() {
                 .get()
                 .addOnSuccessListener { crop ->
                     Log.i("helloabcc3", crop.documents.size.toString())
-                    binding.priceTv.text = crop.documents[0].data?.get("farmer_bid").toString()
-                    binding.inputNewPrice.setText(crop.documents[0].data?.get("buyer_bid").toString())
+                    binding.priceTv.text =
+                        "₹" + crop.documents[0].data?.get("farmer_bid").toString() + "/क्विंटल"
+                    val options: RequestOptions = RequestOptions()
+                        .centerCrop()
+                    binding.inputNewPrice.setText(
+                        crop.documents[0].data?.get("buyer_bid").toString()
+                    )
+
+                    db.collection("Crops").whereEqualTo("itemId", args.itemId).get()
+                        .addOnSuccessListener {
+                            Log.i("itemname", it.documents[0].data?.get("itemName").toString())
+                            binding.titleItemTv.text =
+                                it.documents[0].data?.get("itemName").toString()
+                            Glide.with(requireContext())
+                                .load(it.documents[0].data?.get("image").toString()).apply(options)
+                                .into(binding.mainIv)
+                        }
+
+
                     binding.submitButton.setOnClickListener {
                         val buyerBid = binding.inputNewPrice.text.toString()
                         db.collection("Bidding").document(crop.documents[0].id)
