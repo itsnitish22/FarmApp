@@ -6,45 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".farmer.newItem.FarmerNewItem">
 
-
     <Button
-        android:id="@+id/image1"
+        android:id="@+id/left_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Upload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:background="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cropPrice" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bidsTv"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_devnagri"
+        android:padding="15dp"
+        android:text="बोलियां"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/left_back"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/CropName"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/suggestedPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter Crop Name"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/cropPrice"
+        android:fontFamily="@font/noto_devnagri"
+        android:padding="12dp"
+        android:text="Suggested Price"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.134"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@id/left_back" />
 
-    <EditText
-        android:id="@+id/cropPrice"
-        android:layout_width="wrap_content"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cropNameHead"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Offer your Price"
-        android:inputType="textPersonName"
+        android:layout_marginBottom="25dp"
+        android:hint="Crop Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.134"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CropName" />
+        app:layout_constraintTop_toBottomOf="@id/suggestedPrice">
+
+        <EditText
+            android:id="@+id/cropName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress"
+            tools:text="Rice-Whole" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/offerPriceHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:hint="Offer Price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cropNameHead">
+
+        <EditText
+            android:id="@+id/offerPrice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress"
+            tools:text="Rice-Whole" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/submit"

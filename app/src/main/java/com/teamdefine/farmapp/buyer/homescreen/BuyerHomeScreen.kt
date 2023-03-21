@@ -54,10 +54,11 @@ class BuyerHomeScreen : Fragment() {
     private fun addDataToRecView(cropsData: ArrayList<Map<String, Any>>) {
         adapter2 =
             BuyerHomeAdapter(cropsData, object : BuyerHomeAdapter.ClickListeners {
-                override fun onItemClick(data: Map<String, Any>) {
+                override fun onItemClick(currentData: Map<String, Any>) {
+                    Log.i("crash test", currentData.get("itemId").toString())
                     findNavController().navigate(
                         BuyerHomeScreenDirections.actionBuyerHomeScreenToBuyerBiddingFragment(
-                            data.get("itemId") as String
+                            currentData.get("itemId") as String
                         )
                     )
                 }
