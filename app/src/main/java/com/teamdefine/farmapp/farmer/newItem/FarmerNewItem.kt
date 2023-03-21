@@ -25,6 +25,7 @@ class FarmerNewItem : Fragment() {
     private lateinit var binding: FragmentFarmerNewItemBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var imageUrl: String
+    var url: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,12 +39,12 @@ class FarmerNewItem : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FarmerNewItemViewModel::class.java)
-        binding.image1.setOnClickListener {
+        binding.inputInputPicture.setOnClickListener {
             val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
         }
-        binding.submit.setOnClickListener {
-            saveItemToDb(imageUrl)
+        binding.submitButton.setOnClickListener {
+            saveItemToDb(url.toString())
         }
     }
 
@@ -62,8 +63,8 @@ class FarmerNewItem : Fragment() {
         currentUser?.let {
             crop["farmerId"] = currentUser.uid
             crop["itemId"] = uid
-            crop["itemName"] = binding.CropName.text.toString()
-            crop["itemPrice"] = binding.cropPrice.text.toString()
+            crop["itemName"] = binding.inputCrop.text.toString()
+            crop["itemPrice"] = binding.inputOfferPrice.text.toString()
             crop["image"] = uri
 
 
@@ -95,12 +96,13 @@ class FarmerNewItem : Fragment() {
         val fileName = returnCursor.getString(nameIndex)
         Log.i("hello", "file name : $fileName")
         val storageRef = storage.reference.child("farmer/crops/$fileName")
+        binding.inputInputPicture.setText(storageRef.toString())
         storageRef.putFile(fileUri)
             .addOnSuccessListener { taskSnapshot ->
                 // File uploaded successfully
                 Log.i("SaveFile", "Saved User")
                 storageRef.downloadUrl.addOnSuccessListener {
-                    saveItemToDb(it.toString())
+                    url = it.toString()
                     Log.i("SaveFile", it.toString())
                 }
 
