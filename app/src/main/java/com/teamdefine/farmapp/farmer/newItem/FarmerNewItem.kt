@@ -39,6 +39,10 @@ class FarmerNewItem : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FarmerNewItemViewModel::class.java)
+        initClickListeners()
+    }
+
+    private fun initClickListeners() {
         binding.picture.setOnFocusChangeListener { view, b ->
             val intent = Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(Intent.createChooser(intent, "Select a file"), 777)
