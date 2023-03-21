@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textEmailAddress"
-                    tools:text="IMG1232.png" />
+                    tools:text="Aadhar card" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
