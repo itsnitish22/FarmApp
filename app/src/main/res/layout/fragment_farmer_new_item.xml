@@ -111,7 +111,7 @@
                     android:id="@+id/inputCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="phone"
+                    android:inputType="text"
                     tools:text="Wheat" />
             </com.google.android.material.textfield.TextInputLayout>
 
